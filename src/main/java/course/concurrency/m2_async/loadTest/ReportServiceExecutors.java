@@ -6,7 +6,9 @@ import java.util.concurrent.*;
 
 public class ReportServiceExecutors {
 
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private ExecutorService executor = Executors.newCachedThreadPool();
+//    private ExecutorService executor = Executors.newFixedThreadPool(6);
+//    private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private LoadGenerator loadGenerator = new LoadGenerator();
 
@@ -20,7 +22,8 @@ public class ReportServiceExecutors {
             Collection<Others.Customer> customers = customersFuture.get();
             Collection<Others.Item> items = iFuture.get();
             return combineResults(items, customers);
-        } catch (ExecutionException | InterruptedException ex) {}
+        } catch (ExecutionException | InterruptedException ex) {
+        }
 
         return new Others.Report();
     }

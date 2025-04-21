@@ -1,25 +1,33 @@
 package course.concurrency.m3_shared.auction;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+import static java.util.Objects.isNull;
+
 public class AuctionOptimistic implements Auction {
 
-    private Notifier notifier;
+    private final Notifier notifier;
+    private final AtomicReference<Bid> latestBid = new AtomicReference<>(null);
 
     public AuctionOptimistic(Notifier notifier) {
         this.notifier = notifier;
     }
 
-    private Bid latestBid;
-
-    public boolean propose(Bid bid) {
-        if (bid.getPrice() > latestBid.getPrice()) {
-            notifier.sendOutdatedMessage(latestBid);
-            latestBid = bid;
-            return true;
+    public boolean propose(Bid newBid) {
+        final var updatedBid = latestBid.updateAndGet(savedBid -> {
+            if (isNull(savedBid) || (newBid.getPrice() > savedBid.getPrice())) {
+                return newBid;
+            }
+            return savedBid;
+        });
+        final var bidUpdated = updatedBid.getPrice().equals(newBid.getPrice());
+        if (bidUpdated) {
+            notifier.sendOutdatedMessage(newBid);
         }
-        return false;
+        return bidUpdated;
     }
 
     public Bid getLatestBid() {
-        return latestBid;
+        return latestBid.get();
     }
 }

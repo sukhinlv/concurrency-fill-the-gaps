@@ -36,8 +36,7 @@ public class AuctionTests {
     public void setup() {
         notifier = new Notifier();
         pessimistic = new AuctionPessimistic(notifier);
-        optimistic = new AuctionOptimistic
-                (notifier);
+        optimistic = new AuctionOptimistic(notifier);
     }
 
     @AfterEach

@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 
 public class ReportServiceTests {
 
-//    private ReportServiceExecutors reportService = new ReportServiceExecutors();
+    private ReportServiceExecutors reportService = new ReportServiceExecutors();
 //    private ReportServiceCF reportService = new ReportServiceCF();
-    private ReportServiceVirtual reportService = new ReportServiceVirtual();
+//    private ReportServiceVirtual reportService = new ReportServiceVirtual();
 
     @Test
     public void testMultipleTasks() throws InterruptedException {
